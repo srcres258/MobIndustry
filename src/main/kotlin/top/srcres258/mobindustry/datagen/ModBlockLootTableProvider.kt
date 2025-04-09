@@ -10,6 +10,7 @@ class ModBlockLootTableProvider(
     registries: HolderLookup.Provider
 ) : BlockLootSubProvider(setOf(), FeatureFlags.REGISTRY.allFlags(), registries) {
     override fun generate() {
+        dropSelf(ModBlocks.MOB_FARM.get())
     }
 
     override fun getKnownBlocks(): Iterable<Block> = Iterable {
