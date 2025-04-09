@@ -20,6 +20,7 @@ object ModCreativeModeTabs {
             .icon { ItemStack(ModBlocks.MOB_FARM.get()) }
             .displayItems { parameters, output ->
                 output.accept(ModBlocks.MOB_FARM)
+                output.accept(ModBlocks.MOB_BREEDER)
             }
             .build()
     }

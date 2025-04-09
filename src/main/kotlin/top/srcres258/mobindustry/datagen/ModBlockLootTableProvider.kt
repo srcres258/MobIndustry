@@ -11,6 +11,7 @@ class ModBlockLootTableProvider(
 ) : BlockLootSubProvider(setOf(), FeatureFlags.REGISTRY.allFlags(), registries) {
     override fun generate() {
         dropSelf(ModBlocks.MOB_FARM.get())
+        dropSelf(ModBlocks.MOB_BREEDER.get())
     }
 
     override fun getKnownBlocks(): Iterable<Block> = Iterable {

@@ -25,6 +25,8 @@ class ModBlockStateProvider(
             models().getExistingFile(modLoc("block/mob_farm")),
             MobFarmBlock.FACING
         )
+        simpleBlockWithItem(ModBlocks.MOB_BREEDER.get(),
+            models().getExistingFile(modLoc("block/mob_breeder")))
     }
 
     private fun blockWithItem(block: Block, model: ModelFile = cubeAll(block)) {
