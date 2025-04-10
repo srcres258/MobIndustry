@@ -18,7 +18,7 @@ import top.srcres258.mobindustry.item.ModItems
 object ModEvents {
     @SubscribeEvent
     fun onPlayerInteractEntity(event: PlayerInteractEvent.EntityInteractSpecific) {
-        if (!event.level.isClientSide && event.hand == InteractionHand.MAIN_HAND) {
+        if (!event.level.isClientSide && event.hand == InteractionHand.MAIN_HAND && event.entity.isShiftKeyDown) {
             val player = event.entity
             if (player.getItemInHand(event.hand).isEmpty) {
                 val entity = event.target
