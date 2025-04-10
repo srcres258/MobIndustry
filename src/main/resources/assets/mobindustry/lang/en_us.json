@@ -2,5 +2,8 @@
     "block.mobindustry.mob_farm": "Mob Farm",
     "block.mobindustry.mob_breeder": "Mob Breeder",
 
+    "item.mobindustry.mob_item": "Default Mob Item",
+    "item.mobindustry.mob_item.arguments": "%s Mob Item",
+
     "creativetab.mobindustry.mob_industry_tab": "Mob Industry"
 }

@@ -2,5 +2,8 @@
     "block.mobindustry.mob_farm": "生物农场",
     "block.mobindustry.mob_breeder": "生物繁殖器",
 
+    "item.mobindustry.mob_item": "缺省生物物品",
+    "item.mobindustry.mob_item.arguments": "%s 生物物品",
+
     "creativetab.mobindustry.mob_industry_tab": "生物工业"
 }

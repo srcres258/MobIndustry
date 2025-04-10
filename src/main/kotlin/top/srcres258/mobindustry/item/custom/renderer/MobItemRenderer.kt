@@ -5,6 +5,7 @@ import net.minecraft.client.model.EntityModel
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.EntityRenderers
 import net.minecraft.client.renderer.entity.MobRenderer
+import net.minecraft.core.component.DataComponents
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.item.ItemDisplayContext
@@ -14,6 +15,7 @@ import thedarkcolour.kotlinforforge.neoforge.forge.use
 import top.srcres258.mobindustry.client.ItemRenderer
 import top.srcres258.mobindustry.client.RendererProviders
 import top.srcres258.mobindustry.component.record.MobEntityRecord
+import top.srcres258.mobindustry.util.resetForRendering
 
 class MobItemRenderer : ItemRenderer() {
     private val mobRendererMap: MutableMap<EntityType<Mob>, MobRenderer<Mob, EntityModel<Mob>>> =
@@ -30,6 +32,13 @@ class MobItemRenderer : ItemRenderer() {
         val level = minecraft.level
         if (level != null) {
             val cacheMob = MobEntityRecord.getCacheMob(stack, level)
+
+            // Attach entity data to cacheMob if possible.
+            val entityData = stack.get(DataComponents.ENTITY_DATA)
+            if (entityData != null) {
+                cacheMob.load(entityData.copyTag())
+                cacheMob.resetForRendering()
+            }
 
             run {
                 var mobRenderer = mobRendererMap[cacheMob.type]

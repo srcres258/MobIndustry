@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level
 import top.srcres258.mobindustry.component.ModDataComponents
 import top.srcres258.mobindustry.item.custom.MobItem
 import top.srcres258.mobindustry.util.isResourceLocationStringValid
+import top.srcres258.mobindustry.util.resetForRendering
 import java.lang.ref.WeakReference
 
 private val DEFAULT_ENTITY_TYPE: EntityType<*> = EntityType.PIG
@@ -129,9 +130,7 @@ data class MobEntityRecord(val entityId: String) {
                 mobEntity.customName = customName
             }
         }
-        mobEntity.hurtTime = 0
-        mobEntity.yHeadRot = 0F
-        mobEntity.yHeadRotO = 0F
+        mobEntity.resetForRendering()
         return mobEntity
     }
 

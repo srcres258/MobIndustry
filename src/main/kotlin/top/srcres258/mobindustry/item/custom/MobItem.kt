@@ -2,10 +2,13 @@ package top.srcres258.mobindustry.item.custom
 
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
 import net.minecraft.core.Direction
+import net.minecraft.core.component.DataComponents
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Spawner
 import net.minecraft.world.level.block.Block
@@ -13,6 +16,7 @@ import net.minecraft.world.level.gameevent.GameEvent
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions
 import top.srcres258.mobindustry.component.record.MobEntityRecord
 import top.srcres258.mobindustry.item.custom.renderer.MobItemRenderer
+import top.srcres258.mobindustry.util.createDoubleList
 
 class MobItem(properties: Properties) : Item(properties) {
     object ClientItemExtensions : IClientItemExtensions {
@@ -44,7 +48,7 @@ class MobItem(properties: Properties) : Item(properties) {
                     blockPos.relative(direction)
                 }
 
-                if (itemStackEntityType.spawn(
+                val spawnedMob = itemStackEntityType.spawn(
                     level,
                     itemStack,
                     context.player,
@@ -52,7 +56,24 @@ class MobItem(properties: Properties) : Item(properties) {
                     MobSpawnType.SPAWN_EGG,
                     true,
                     blockPos != targetBlockPos && direction == Direction.UP
-                ) != null) {
+                )
+                if (spawnedMob != null) {
+                    val entityData = itemStack.get(DataComponents.ENTITY_DATA)
+                    if (entityData != null && !entityData.isEmpty) {
+                        val nbt = entityData.copyTag()
+                        if (nbt.contains("Pos")) {
+                            // Discard the position data since we want to spawn the mob right at where the player
+                            // has clicked.
+                            nbt.remove("Pos")
+                        }
+                        nbt.put("Pos", createDoubleList(
+                            targetBlockPos.x.toDouble() + 0.5,
+                            targetBlockPos.y.toDouble(),
+                            targetBlockPos.z.toDouble() + 0.5
+                        ))
+                        spawnedMob.load(nbt)
+                    }
+
                     itemStack.shrink(1)
                     level.gameEvent(context.player, GameEvent.ENTITY_PLACE, blockPos)
                 }
@@ -61,6 +82,15 @@ class MobItem(properties: Properties) : Item(properties) {
             return InteractionResult.CONSUME
         } else {
             return InteractionResult.SUCCESS
+        }
+    }
+
+    override fun getName(stack: ItemStack): Component {
+        val record = MobEntityRecord.get(stack)
+        return if (record == null) {
+            super.getName(stack)
+        } else {
+            Component.translatable("${descriptionId}.arguments", record.entityType.description.string)
         }
     }
 }
